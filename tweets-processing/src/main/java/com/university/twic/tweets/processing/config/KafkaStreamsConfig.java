@@ -1,16 +1,32 @@
 package com.university.twic.tweets.processing.config;
 
+import static com.university.twic.tweets.processing.twitter.bot.TwitterBotRecognizing.checkIsTwitterBot;
+import static com.university.twic.tweets.processing.twitter.bot.TwitterBotRecognizing.updateBotModelParameters;
+
+import com.university.twic.tweets.processing.kafka.TwitterDeserializer;
+import com.university.twic.tweets.processing.kafka.TwitterSerializer;
+import com.university.twic.tweets.processing.twitter.bot.TwitterBot;
+import com.university.twic.tweets.processing.twitter.bot.TwitterBotRecognizing;
 import com.university.twic.tweets.processing.twitter.model.Tweet;
 import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.Serializer;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.state.KeyValueStore;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,20 +62,42 @@ public class KafkaStreamsConfig {
   }
 
   @Bean
-  public KStream<String, String> tweetStream(StreamsBuilder streamsBuilder, NewTopic usersTopic) {
+  public KStream<String, String> tweetStream(StreamsBuilder streamsBuilder,
+      @Qualifier("twitter-users") NewTopic usersTopic,
+      @Qualifier("twitter-users-intermediary") NewTopic intermediaryTopic) {
 
-    Serde<String> stringSerde = Serdes.String();
+    final Serializer<Tweet> tweetSerializer = new TwitterSerializer<>();
+    final Deserializer<Tweet> tweetDeserializer = new TwitterDeserializer<>(Tweet.class);
+    final Serde<Tweet> tweetSerde = Serdes.serdeFrom(tweetSerializer, tweetDeserializer);
 
-    //TODO: here is a business processing logic - recognizing twitter bot accounts
-    KStream<String, String> tweetStream = streamsBuilder.stream(topic, Consumed.with(stringSerde, stringSerde));
+    final Serializer<TwitterBot> twitterBotSerializer = new TwitterSerializer<>();
+    final Deserializer<TwitterBot> twitterBotDeserializer = new TwitterDeserializer<>(TwitterBot.class);
+    final Serde<TwitterBot> twitterBotSerde = Serdes.serdeFrom(twitterBotSerializer, twitterBotDeserializer);
 
-    tweetStream
+    KStream<String, String> tweetJsonStream = streamsBuilder.stream(topic, Consumed.with(Serdes.String(), Serdes.String()));
+
+    tweetJsonStream
         .mapValues(JsonTwitterConverter::extractTweetFromJson)
         .filter((k, tweet) -> tweet.getUser() != null)
-        .filter((k, tweet) -> tweet.getUser().getFriendsCount() > 1000)
-        .mapValues(Tweet::toString)
-        .to(usersTopic.name());
+        .filter((k, tweet) -> tweet.getUser().getFriendsCount() > 1000) //TODO: remove
+        .selectKey((ignoredKey, tweet) -> tweet.getUser().getId())
+        .to(intermediaryTopic.name(), Produced.with(Serdes.Long(), tweetSerde));
 
-    return tweetStream;
+    KStream<Long, Tweet> tweetStream = streamsBuilder
+        .stream(intermediaryTopic.name(), Consumed.with(Serdes.Long(), tweetSerde));
+
+    KTable<Long, TwitterBot> twitterBotTable = tweetStream
+        .groupByKey(Grouped.with(Serdes.Long(), tweetSerde))
+        .aggregate(
+            TwitterBotRecognizing::initialEmptyTwitterBotModel,
+            (key, tweet, twitterBot) -> updateBotModelParameters(twitterBot, tweet),
+            Materialized.<Long, TwitterBot, KeyValueStore<Bytes, byte[]>>as("twitter-bot-agg")
+                .withKeySerde(Serdes.Long())
+                .withValueSerde(twitterBotSerde)
+        )
+        .filter((k, twitterBot) -> checkIsTwitterBot(twitterBot));
+
+    twitterBotTable.toStream().to(usersTopic.name(), Produced.with(Serdes.Long(), twitterBotSerde));
+    return tweetJsonStream;
   }
 }

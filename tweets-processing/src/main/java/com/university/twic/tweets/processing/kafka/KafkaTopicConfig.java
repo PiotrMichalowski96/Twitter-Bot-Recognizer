@@ -17,7 +17,10 @@ public class KafkaTopicConfig {
   private String bootstrapAddress;
 
   @Value("${kafka.topic.users}")
-  private String topic;
+  private String twitterTopic;
+
+  @Value("${kafka.topic.intermediary}")
+  private String intermediaryTopic;
 
   @Bean
   public KafkaAdmin kafkaAdmin() {
@@ -26,11 +29,21 @@ public class KafkaTopicConfig {
     return new KafkaAdmin(configs);
   }
 
-  @Bean
+  @Bean(name = "twitter-users")
   public NewTopic twitterTopic() {
-    return TopicBuilder.name(topic)
+    return TopicBuilder.name(twitterTopic)
         .partitions(3)
         .replicas(1)
+//        .compact() //TODO: check
+        .build();
+  }
+
+  @Bean(name = "twitter-users-intermediary")
+  public NewTopic intermediaryTopic() {
+    return TopicBuilder.name(intermediaryTopic)
+        .partitions(1)
+        .replicas(1)
+//        .compact() //TODO: check
         .build();
   }
 }

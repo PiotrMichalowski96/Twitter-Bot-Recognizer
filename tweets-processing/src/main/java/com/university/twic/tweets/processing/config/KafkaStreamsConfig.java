@@ -1,6 +1,6 @@
 package com.university.twic.tweets.processing.config;
 
-import com.university.twic.tweets.processing.twitter.model.TwitterUser;
+import com.university.twic.tweets.processing.twitter.model.Tweet;
 import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,17 +51,15 @@ public class KafkaStreamsConfig {
     Serde<String> stringSerde = Serdes.String();
 
     //TODO: here is a business processing logic - recognizing twitter bot accounts
-    KStream<String, String> inputTopic = streamsBuilder.stream(topic, Consumed.with(stringSerde, stringSerde));
+    KStream<String, String> tweetStream = streamsBuilder.stream(topic, Consumed.with(stringSerde, stringSerde));
 
-    KStream<String, String> filteredStream = inputTopic
-        .mapValues(JsonTwitterConverter::extractUserFromTweetJson)
-        .filter((k, v) -> v != null)
-        .filter(
-            (k, twitterUser) -> twitterUser.getFriendsCount() > 1000
-        )
-        .mapValues(TwitterUser::toString);
+    tweetStream
+        .mapValues(JsonTwitterConverter::extractTweetFromJson)
+        .filter((k, tweet) -> tweet.getUser() != null)
+        .filter((k, tweet) -> tweet.getUser().getFriendsCount() > 1000)
+        .mapValues(Tweet::toString)
+        .to(usersTopic.name());
 
-    filteredStream.to(usersTopic.name());
-    return inputTopic;
+    return tweetStream;
   }
 }

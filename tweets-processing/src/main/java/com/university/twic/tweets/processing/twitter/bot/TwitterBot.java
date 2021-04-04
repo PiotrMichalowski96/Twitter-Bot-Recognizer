@@ -13,7 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TwitterBot {
-
   private TwitterUser twitterUser;
   private String lastTweetContent;
   private LocalDateTime lastTweetDateTime;

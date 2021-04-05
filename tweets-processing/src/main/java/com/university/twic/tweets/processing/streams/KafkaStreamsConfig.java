@@ -1,6 +1,5 @@
-package com.university.twic.tweets.processing.config;
+package com.university.twic.tweets.processing.streams;
 
-import static com.university.twic.tweets.processing.twitter.bot.TwitterBotRecognizing.checkIsTwitterBot;
 import static com.university.twic.tweets.processing.twitter.bot.TwitterBotRecognizing.updateBotModelParameters;
 
 import com.university.twic.tweets.processing.kafka.TwitterDeserializer;
@@ -94,8 +93,7 @@ public class KafkaStreamsConfig {
             Materialized.<Long, TwitterBot, KeyValueStore<Bytes, byte[]>>as("twitter-bot-agg")
                 .withKeySerde(Serdes.Long())
                 .withValueSerde(twitterBotSerde)
-        )
-        .filter((k, twitterBot) -> checkIsTwitterBot(twitterBot));
+        );
 
     twitterBotTable.toStream().to(usersTopic.name(), Produced.with(Serdes.Long(), twitterBotSerde));
     return tweetJsonStream;

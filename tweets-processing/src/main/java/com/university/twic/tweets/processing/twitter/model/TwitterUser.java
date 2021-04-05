@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString //TODO: remove ToString
+@ToString
 public class TwitterUser {
 
   @SerializedName("id")

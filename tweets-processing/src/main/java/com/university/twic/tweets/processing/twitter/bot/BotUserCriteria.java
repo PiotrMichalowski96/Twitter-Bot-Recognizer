@@ -1,9 +1,7 @@
 package com.university.twic.tweets.processing.twitter.bot;
 
-import static com.university.twic.tweets.processing.twitter.bot.math.Parameters.*;
-import static com.university.twic.tweets.processing.twitter.bot.math.Probability.decreaseProbability;
-import static com.university.twic.tweets.processing.twitter.bot.math.Probability.increaseProbability;
-import static com.university.twic.tweets.processing.twitter.bot.math.Probability.multipleIncreaseProbability;
+import static com.university.twic.tweets.processing.twitter.bot.Parameters.*;
+import static com.university.twic.tweets.processing.twitter.bot.math.Probability.*;
 
 import com.university.twic.tweets.processing.twitter.model.TwitterUser;
 import com.university.twic.tweets.processing.twitter.util.TwitterDateTimeConverter;
@@ -23,25 +21,25 @@ import org.apache.commons.lang3.StringUtils;
 enum BotUserCriteria {
 
   PHOTO((twitterUser, botProbability) -> twitterUser.getDefaultProfile()
-      ? multipleIncreaseProbability(botProbability, 5)
-      : decreaseProbability(botProbability)),
+      ? multipleIncreaseProbability(botProbability, PHOTO_INCREASE_WEIGHT)
+      : multipleDecreaseProbability(botProbability, PHOTO_DECREASE_WEIGHT)),
 
   BACKGROUND((twitterUser, botProbability) -> twitterUser.getDefaultProfileImage()
-      ? increaseProbability(botProbability)
+      ? multipleIncreaseProbability(botProbability, BACKGROUND_INCREASE_WEIGHT)
       : decreaseProbability(botProbability)),
 
   CREATING_TIME((twitterUser, botProbability) -> {
     String accountTime = twitterUser.getCreatedAt();
     LocalDateTime createdAccountTime = TwitterDateTimeConverter.convertTwitterDateTime(accountTime);
     boolean isRecentlyCreated = (Duration.between(createdAccountTime, LocalDateTime.now()).toHours() < RECENTLY_IN_HOURS);
-    return isRecentlyCreated ? increaseProbability(botProbability) : botProbability;
+    return isRecentlyCreated ? multipleIncreaseProbability(botProbability, CREATING_TIME_INCREASE_WEIGHT) : botProbability;
   }),
 
   ACCOUNT_NAME((twitterUser, botProbability) -> {
-    String userName = twitterUser.getName();
-    String screenName = twitterUser.getScreenName();
+    String userName = StringUtils.remove(twitterUser.getName(), StringUtils.SPACE);
+    String screenName = StringUtils.remove(twitterUser.getName(), StringUtils.SPACE);
     boolean doesNameContainNumbers = (!StringUtils.isAlpha(userName) || !StringUtils.isAlpha(screenName));
-    return doesNameContainNumbers ? increaseProbability(botProbability) : botProbability;
+    return doesNameContainNumbers ? multipleIncreaseProbability(botProbability, ACC_NAME_INCREASE_WEIGHT) : botProbability;
   }),
 
   DESCRIPTION((twitterUser, botProbability) -> {
@@ -49,14 +47,14 @@ enum BotUserCriteria {
     boolean isDescriptionWarning = WARNING_WORDS.stream()
         .anyMatch(word -> StringUtils.containsIgnoreCase(description, word));
 
-    return isDescriptionWarning ? increaseProbability(botProbability) : botProbability;
+    return isDescriptionWarning ? multipleIncreaseProbability(botProbability, DESCRIPTION_INCREASE_WEIGHT) : botProbability;
   }),
 
   FOLLOWERS((twitterUser, botProbability) -> {
     Long followers = twitterUser.getFollowersCount();
     Long followings = twitterUser.getFriendsCount();
     return (followers < MIN_FOLLOWERS && followings > MAX_FOLLOWINGS)
-        ? increaseProbability(botProbability) : botProbability;
+        ? multipleIncreaseProbability(botProbability ,FOLLOWERS_INCREASE_WEIGHT) : botProbability;
   }),
 
   LIKED_TWEETS((twitterUser, botProbability) -> {

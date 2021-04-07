@@ -25,5 +25,6 @@ public class TwitterBot {
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   private LocalDateTime lastTweetDateTime;
+  private long analyzedTweets;
   private BigDecimal botProbability;
 }

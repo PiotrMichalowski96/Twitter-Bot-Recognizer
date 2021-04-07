@@ -7,7 +7,11 @@ import static com.university.twic.tweets.processing.util.BigDecimalAssertionUtil
 import com.university.twic.tweets.processing.twitter.model.TwitterUser;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class TwitterBotRecognizingTest {
 
@@ -19,7 +23,7 @@ public class TwitterBotRecognizingTest {
     LocalDateTime lastTweetTime = LocalDateTime.now().minusSeconds(3);
     BigDecimal probability = BigDecimal.valueOf(0.3);
 
-    BigDecimal expectedProbability = BigDecimal.valueOf(0.433);
+    BigDecimal expectedProbability = BigDecimal.valueOf(0.698);
 
     //when
     BigDecimal result = calculateBotProbabilityByCurrentTweet(tweetContent, newTweetTime,
@@ -29,13 +33,11 @@ public class TwitterBotRecognizingTest {
     assertBigDecimal(result, expectedProbability, BigDecimal.valueOf(0.001));
   }
 
-  @Test
-  public void shouldCalculateBotProbabilityBasedOnTwitterUser() {
+  @ParameterizedTest
+  @MethodSource("provideTwitterUsers")
+  public void shouldCalculateBotProbabilityBasedOnTwitterUser(TwitterUser twitterUser, BigDecimal expectedProbability) {
     //given
-    TwitterUser twitterUser = createBotUser();
     BigDecimal probability = BigDecimal.valueOf(0.3);
-
-    BigDecimal expectedProbability = BigDecimal.valueOf(0.7803);
 
     //when
     BigDecimal result = calculateBotProbabilityByTwitterUserData(twitterUser, probability);
@@ -44,7 +46,14 @@ public class TwitterBotRecognizingTest {
     assertBigDecimal(result, expectedProbability, BigDecimal.valueOf(0.001));
   }
 
-  private TwitterUser createBotUser() {
+  private static Stream<Arguments> provideTwitterUsers() {
+    return Stream.of(
+        Arguments.of(createBotUser(), BigDecimal.valueOf(0.914)),
+        Arguments.of(createNormalUser(), BigDecimal.valueOf(0.039))
+    );
+  }
+
+  private static TwitterUser createBotUser() {
     TwitterUser twitterUser = new TwitterUser();
     twitterUser.setVerified(false);
     twitterUser.setDefaultProfile(true);
@@ -57,6 +66,22 @@ public class TwitterBotRecognizingTest {
     twitterUser.setFriendsCount(1000L);
     twitterUser.setFavouritesCount(10000L);
     twitterUser.setStatusesCount(10000L);
+    return twitterUser;
+  }
+
+  private static TwitterUser createNormalUser() {
+    TwitterUser twitterUser = new TwitterUser();
+    twitterUser.setVerified(false);
+    twitterUser.setDefaultProfile(false);
+    twitterUser.setDefaultProfileImage(false);
+    twitterUser.setCreatedAt("Fri Jul 03 01:18:18 +0000 2009");
+    twitterUser.setName("John Smith");
+    twitterUser.setScreenName("JSmth");
+    twitterUser.setDescription("Normal Description");
+    twitterUser.setFollowersCount(50L);
+    twitterUser.setFriendsCount(30L);
+    twitterUser.setFavouritesCount(600L);
+    twitterUser.setStatusesCount(1000L);
     return twitterUser;
   }
 }

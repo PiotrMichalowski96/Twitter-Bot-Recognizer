@@ -1,9 +1,11 @@
 package com.university.twic.tweets.processing.twitter.bot;
 
-import static com.university.twic.tweets.processing.twitter.bot.math.Parameters.MIN_SEC_BETWEEN_TWEETS;
-import static com.university.twic.tweets.processing.twitter.bot.math.Parameters.WARNING_WORDS;
+import static com.university.twic.tweets.processing.twitter.bot.Parameters.FAST_TWEETING_INCREASE_WEIGHT;
+import static com.university.twic.tweets.processing.twitter.bot.Parameters.MIN_SEC_BETWEEN_TWEETS;
+import static com.university.twic.tweets.processing.twitter.bot.Parameters.TWEET_CONTENT_INCREASE_WEIGHT;
+import static com.university.twic.tweets.processing.twitter.bot.Parameters.WARNING_WORDS;
 import static com.university.twic.tweets.processing.twitter.bot.math.Probability.INITIAL_BOT_PROBABILITY;
-import static com.university.twic.tweets.processing.twitter.bot.math.Probability.increaseProbability;
+import static com.university.twic.tweets.processing.twitter.bot.math.Probability.multipleIncreaseProbability;
 
 import com.university.twic.tweets.processing.twitter.model.Tweet;
 import com.university.twic.tweets.processing.twitter.model.TwitterUser;
@@ -19,6 +21,7 @@ public class TwitterBotRecognizing {
   public static TwitterBot initialEmptyTwitterBotModel() {
     return TwitterBot.builder()
         .botProbability(INITIAL_BOT_PROBABILITY)
+        .analyzedTweets(0L)
         .build();
   }
 
@@ -26,7 +29,7 @@ public class TwitterBotRecognizing {
     TwitterUser twitterUser = tweet.getUser();
     String tweetContent = tweet.getText();
     LocalDateTime tweetTime = tweet.getCreatedTime();
-
+    long analyzedTweets = twitterBot.getAnalyzedTweets() + 1;
     BigDecimal botProbability = twitterBot.getBotProbability();
 
     //Perform only one time per twitter user
@@ -41,6 +44,7 @@ public class TwitterBotRecognizing {
         .twitterUser(twitterUser)
         .lastTweetContent(tweetContent)
         .lastTweetDateTime(tweetTime)
+        .analyzedTweets(analyzedTweets)
         .botProbability(botProbability)
         .build();
   }
@@ -77,7 +81,8 @@ public class TwitterBotRecognizing {
 
     boolean isContentWarning = WARNING_WORDS.stream()
         .anyMatch(word -> StringUtils.containsIgnoreCase(tweetContent, word));
-    return (isContentWarning) ? increaseProbability(botProbability) : botProbability;
+    return (isContentWarning)
+        ? multipleIncreaseProbability(botProbability, TWEET_CONTENT_INCREASE_WEIGHT) : botProbability;
   }
 
   public static BigDecimal calculateBotProbabilityBasedOnFastTweeting(LocalDateTime newTweetTime,
@@ -85,6 +90,7 @@ public class TwitterBotRecognizing {
       BigDecimal botProbability) {
 
     long secondsBetweenTweets = Duration.between(lastTweetTime, newTweetTime).toSeconds();
-    return (secondsBetweenTweets < MIN_SEC_BETWEEN_TWEETS) ? increaseProbability(botProbability) : botProbability;
+    return (secondsBetweenTweets < MIN_SEC_BETWEEN_TWEETS)
+        ? multipleIncreaseProbability(botProbability, FAST_TWEETING_INCREASE_WEIGHT) : botProbability;
   }
 }

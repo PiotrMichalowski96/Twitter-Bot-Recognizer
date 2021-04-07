@@ -78,7 +78,6 @@ public class KafkaStreamsConfig {
     tweetJsonStream
         .mapValues(JsonTwitterConverter::extractTweetFromJson)
         .filter((k, tweet) -> tweet.getUser() != null)
-        .filter((k, tweet) -> tweet.getUser().getFriendsCount() > 1000) //TODO: remove
         .selectKey((ignoredKey, tweet) -> tweet.getUser().getId())
         .to(intermediaryTopic.name(), Produced.with(Serdes.Long(), tweetSerde));
 

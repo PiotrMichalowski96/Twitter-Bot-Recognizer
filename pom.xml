@@ -71,6 +71,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.university.twic.tweets.processing.TweetsProcessingApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

@@ -10,6 +10,7 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,6 +23,7 @@ public class MessageListener {
   private final RestHighLevelClient client;
   private final String indexName;
 
+  @Autowired
   public MessageListener(@Qualifier("ElasticSearch-Client") RestHighLevelClient client,
       @Value("${elasticsearch.index}") String indexName) {
     this.client = client;

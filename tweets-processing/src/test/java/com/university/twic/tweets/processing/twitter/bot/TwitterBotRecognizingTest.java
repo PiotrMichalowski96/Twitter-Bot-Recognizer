@@ -23,7 +23,7 @@ public class TwitterBotRecognizingTest {
     LocalDateTime lastTweetTime = LocalDateTime.now().minusSeconds(3);
     BigDecimal probability = BigDecimal.valueOf(0.3);
 
-    BigDecimal expectedProbability = BigDecimal.valueOf(0.698);
+    BigDecimal expectedProbability = BigDecimal.valueOf(0.728);
 
     //when
     BigDecimal result = calculateBotProbabilityByCurrentTweet(tweetContent, newTweetTime,

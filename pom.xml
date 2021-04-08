@@ -6,7 +6,8 @@
   <modules>
     <module>kafka-twitter-producer</module>
 		<module>tweets-processing</module>
-	</modules>
+    <module>kafka-elasticsearch-consumer</module>
+  </modules>
   <parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -70,6 +71,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.university.twic.tweets.processing.TweetsProcessingApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

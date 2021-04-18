@@ -34,7 +34,7 @@ public class KafkaTopicConfig {
     return TopicBuilder.name(twitterTopic)
         .partitions(3)
         .replicas(1)
-//        .compact() //TODO: check
+        .compact()
         .build();
   }
 
@@ -43,7 +43,6 @@ public class KafkaTopicConfig {
     return TopicBuilder.name(intermediaryTopic)
         .partitions(1)
         .replicas(1)
-//        .compact() //TODO: check
         .build();
   }
 }

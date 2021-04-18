@@ -13,8 +13,10 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+@Slf4j
 @UtilityClass
 public class TwitterBotRecognizing {
 
@@ -40,13 +42,16 @@ public class TwitterBotRecognizing {
     LocalDateTime lastTweetTime = twitterBot.getLastTweetDateTime();
     botProbability = calculateBotProbabilityByCurrentTweet(tweetContent, tweetTime, lastTweetTime, botProbability);
 
-    return TwitterBot.builder()
+    TwitterBot updatedTwitterBot = TwitterBot.builder()
         .twitterUser(twitterUser)
         .lastTweetContent(tweetContent)
         .lastTweetDateTime(tweetTime)
         .analyzedTweets(analyzedTweets)
         .botProbability(botProbability)
         .build();
+
+    logger.info(updatedTwitterBot.toString());
+    return updatedTwitterBot;
   }
 
   public static BigDecimal calculateBotProbabilityByTwitterUserData(TwitterUser twitterUser,

@@ -1,0 +1,12 @@
+server:
+  port: 8081
+kafka:
+  bootstrapAddress: 127.0.0.1:9092
+  topic: twitter_tweets_raw
+#TODO: Below please paste your twitter credentials
+twitter:
+  consumerKey: 8pxg64D3Q7fdyZqiT4nB08I8o
+  consumerSecret: qkZDb1mvD02QFBgcPTqJkbOVREB0CPhLQi2F8zudKg3kgIfpI4
+  token: 1368205860955160581-pzqxtXAKCvQHPMgkyZQUDfZcfx8hPf
+  tokenSecret: ity9kIsdLzu0nzoDjsaWzGiPQaRBQux87tlM7XZicNBCW
+  capacity: 1000

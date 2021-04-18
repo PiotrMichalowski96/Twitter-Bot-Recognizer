@@ -1,0 +1,13 @@
+server:
+  port: 8083
+kafka:
+  bootstrapAddress: 127.0.0.1:9092
+  topic: twitter_bot_accounts
+  consumer:
+    groupId: kafka-elasticsearch-consumer
+#TODO: Below please paste your elasticsearch cluster credentials and index name
+elasticsearch:
+  hostname: kafka-learning-7300741448.us-east-1.bonsaisearch.net
+  username: xwvihc56vs
+  password: bqfaxzg5z6
+  index: twitter-bots

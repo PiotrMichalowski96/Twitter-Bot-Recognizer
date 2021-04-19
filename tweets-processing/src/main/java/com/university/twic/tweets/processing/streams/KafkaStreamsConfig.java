@@ -10,6 +10,7 @@ import com.university.twic.tweets.processing.twitter.model.Tweet;
 import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
@@ -77,7 +78,7 @@ public class KafkaStreamsConfig {
 
     tweetJsonStream
         .mapValues(JsonTwitterConverter::extractTweetFromJson)
-        .filter((k, tweet) -> tweet.getUser() != null)
+        .filter((k, tweet) -> Objects.nonNull(tweet.getUser()))
         .selectKey((ignoredKey, tweet) -> tweet.getUser().getId())
         .to(intermediaryTopic.name(), Produced.with(Serdes.Long(), tweetSerde));
 

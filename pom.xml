@@ -22,7 +22,7 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<project.lombok.version>1.18.18</project.lombok.version>
+		<project.lombok.version>1.18.22</project.lombok.version>
 	</properties>
 
 	<dependencies>

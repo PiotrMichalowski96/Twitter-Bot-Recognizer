@@ -69,9 +69,9 @@ class JsonTwitterConverterTest extends Specification {
     }
 
     private static Tweet getExpectedTweet() {
-        TwitterUser expectedTwitterUser = getExpectedTwitterUser();
+        TwitterUser expectedTwitterUser = getExpectedTwitterUser()
         String expectedText = 'RT @AirdropStario: \ud83d\udca7Twinci Airdrop \ud83d\udca7\n\n\ud83c\udfc6 Task:          \u2795 $15 worth of  TRX\n\n                            \u2795 $50 worth of TWIN\n\n\ud83d\udd1b Airdrop Link\u2026'
-        LocalDateTime expectedDateTime = LocalDateTime.of(2021, 4, 2, 11, 49, 15);
-        return new Tweet(expectedTwitterUser, expectedText, expectedDateTime);
+        LocalDateTime expectedDateTime = LocalDateTime.of(2021, 4, 2, 11, 49, 15)
+        return new Tweet(expectedTwitterUser, expectedText, expectedDateTime)
     }
 }

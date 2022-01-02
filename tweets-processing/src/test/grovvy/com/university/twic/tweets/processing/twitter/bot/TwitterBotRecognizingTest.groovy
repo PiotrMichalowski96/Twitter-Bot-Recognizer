@@ -17,7 +17,7 @@ class TwitterBotRecognizingTest extends Specification {
 
     def "should calculate bot probability based on tweet"() {
         given:
-        String tweetContent = "Register here and join our bitcoin club"
+        String tweetContent = 'Register here and join our bitcoin club'
         LocalDateTime newTweetTime = LocalDateTime.now()
         LocalDateTime lastTweetTime = LocalDateTime.now().minusSeconds(3)
         BigDecimal probability = BigDecimal.valueOf(0.3)
@@ -48,10 +48,10 @@ class TwitterBotRecognizingTest extends Specification {
         twitterUser.setVerified(false)
         twitterUser.setDefaultProfile(true)
         twitterUser.setDefaultProfileImage(true)
-        twitterUser.setCreatedAt("Fri Jul 03 01:18:18 +0000 2009")
-        twitterUser.setName("AA123")
-        twitterUser.setScreenName("AA123")
-        twitterUser.setDescription("Register here and join us")
+        twitterUser.setCreatedAt('Fri Jul 03 01:18:18 +0000 2009')
+        twitterUser.setName('AA123')
+        twitterUser.setScreenName('AA123')
+        twitterUser.setDescription('Register here and join us')
         twitterUser.setFollowersCount(1L)
         twitterUser.setFriendsCount(1000L)
         twitterUser.setFavouritesCount(10000L)
@@ -64,10 +64,10 @@ class TwitterBotRecognizingTest extends Specification {
         twitterUser.setVerified(false)
         twitterUser.setDefaultProfile(false)
         twitterUser.setDefaultProfileImage(false)
-        twitterUser.setCreatedAt("Fri Jul 03 01:18:18 +0000 2009")
-        twitterUser.setName("John Smith")
-        twitterUser.setScreenName("JSmth")
-        twitterUser.setDescription("Normal Description")
+        twitterUser.setCreatedAt('Fri Jul 03 01:18:18 +0000 2009')
+        twitterUser.setName('John Smith')
+        twitterUser.setScreenName('JSmth')
+        twitterUser.setDescription('Normal Description')
         twitterUser.setFollowersCount(50L)
         twitterUser.setFriendsCount(30L)
         twitterUser.setFavouritesCount(600L)

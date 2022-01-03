@@ -1,0 +1,31 @@
+{
+  "twitterUser": {
+    "id": 1127819079744729088,
+    "name": "Airdropcu90",
+    "screen_name": "airdropcu90",
+    "verified": false,
+    "followers_count": 27,
+    "friends_count": 347,
+    "favourites_count": 264,
+    "statuses_count": 641,
+    "created_at": "Mon May 13 06:13:17 +0000 2019",
+    "default_profile": true,
+    "default_profile_image": false
+  },
+  "lastTweetContent": "RT @AirdropStario: 💧Twinci Airdrop 💧\n\n🏆 Task:          ➕ $15 worth of  TRX\n\n                            ➕ $50 worth of TWIN\n\n🔛 Airdrop Link…",
+  "lastTweetDateTime": {
+    "date": {
+      "year": 2021,
+      "month": 4,
+      "day": 2
+    },
+    "time": {
+      "hour": 12,
+      "minute": 0,
+      "second": 3,
+      "nano": 0
+    }
+  },
+  "analyzedTweets": 1,
+  "botProbability": 0.780332582737
+}

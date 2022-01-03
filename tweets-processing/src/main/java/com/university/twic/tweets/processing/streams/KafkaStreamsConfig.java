@@ -11,7 +11,8 @@ import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.kafka.clients.admin.NewTopic;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -26,7 +27,6 @@ import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +38,8 @@ import org.springframework.kafka.config.KafkaStreamsConfiguration;
 @Configuration
 @EnableKafka
 @EnableKafkaStreams
+@Getter
+@Setter
 public class KafkaStreamsConfig {
 
   @Value("${kafka.bootstrapAddress}")
@@ -47,7 +49,13 @@ public class KafkaStreamsConfig {
   private String appName;
 
   @Value("${kafka.topic.tweets}")
-  private String topic;
+  private String inputTopic;
+
+  @Value("${kafka.topic.intermediary}")
+  private String intermediaryTopic;
+
+  @Value("${kafka.topic.users}")
+  private String outputTopic;
 
   @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
   public KafkaStreamsConfiguration kafkaStreamConfig() {
@@ -62,9 +70,7 @@ public class KafkaStreamsConfig {
   }
 
   @Bean
-  public KStream<String, String> tweetStream(StreamsBuilder streamsBuilder,
-      @Qualifier("twitter-users") NewTopic usersTopic,
-      @Qualifier("twitter-users-intermediary") NewTopic intermediaryTopic) {
+  public KStream<String, String> tweetStream(StreamsBuilder streamsBuilder) {
 
     final Serializer<Tweet> tweetSerializer = new TwitterSerializer<>();
     final Deserializer<Tweet> tweetDeserializer = new TwitterDeserializer<>(Tweet.class);
@@ -74,16 +80,16 @@ public class KafkaStreamsConfig {
     final Deserializer<TwitterBot> twitterBotDeserializer = new TwitterDeserializer<>(TwitterBot.class);
     final Serde<TwitterBot> twitterBotSerde = Serdes.serdeFrom(twitterBotSerializer, twitterBotDeserializer);
 
-    KStream<String, String> tweetJsonStream = streamsBuilder.stream(topic, Consumed.with(Serdes.String(), Serdes.String()));
+    KStream<String, String> tweetJsonStream = streamsBuilder.stream(inputTopic, Consumed.with(Serdes.String(), Serdes.String()));
 
     tweetJsonStream
         .mapValues(JsonTwitterConverter::extractTweetFromJson)
         .filter((k, tweet) -> Objects.nonNull(tweet.getUser()))
         .selectKey((ignoredKey, tweet) -> tweet.getUser().getId())
-        .to(intermediaryTopic.name(), Produced.with(Serdes.Long(), tweetSerde));
+        .to(intermediaryTopic, Produced.with(Serdes.Long(), tweetSerde));
 
     KStream<Long, Tweet> tweetStream = streamsBuilder
-        .stream(intermediaryTopic.name(), Consumed.with(Serdes.Long(), tweetSerde));
+        .stream(intermediaryTopic, Consumed.with(Serdes.Long(), tweetSerde));
 
     KTable<Long, TwitterBot> twitterBotTable = tweetStream
         .groupByKey(Grouped.with(Serdes.Long(), tweetSerde))
@@ -95,7 +101,7 @@ public class KafkaStreamsConfig {
                 .withValueSerde(twitterBotSerde)
         );
 
-    twitterBotTable.toStream().to(usersTopic.name(), Produced.with(Serdes.Long(), twitterBotSerde));
+    twitterBotTable.toStream().to(outputTopic, Produced.with(Serdes.Long(), twitterBotSerde));
     return tweetJsonStream;
   }
 }

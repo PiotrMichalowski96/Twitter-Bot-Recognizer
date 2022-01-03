@@ -12,7 +12,7 @@
   <artifactId>tweets-processing</artifactId>
 
   <properties>
-    <kafka.streams.version>2.7.0</kafka.streams.version>
+    <kafka.streams.version>3.0.0</kafka.streams.version>
   </properties>
 
   <dependencies>

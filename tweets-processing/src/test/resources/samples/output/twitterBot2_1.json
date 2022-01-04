@@ -1,0 +1,31 @@
+{
+  "twitterUser": {
+    "id": 1117819079744729999,
+    "name": "Bot123",
+    "screen_name": "bot123",
+    "verified": false,
+    "followers_count": 27,
+    "friends_count": 347,
+    "favourites_count": 264,
+    "statuses_count": 641,
+    "created_at": "Fri Apr 02 10:00:00 +0000 2021",
+    "default_profile": true,
+    "default_profile_image": true
+  },
+  "lastTweetContent": "",
+  "lastTweetDateTime": {
+    "date": {
+      "year": 2021,
+      "month": 4,
+      "day": 2
+    },
+    "time": {
+      "hour": 12,
+      "minute": 0,
+      "second": 4,
+      "nano": 0
+    }
+  },
+  "analyzedTweets": 3,
+  "botProbability": 0.93106603684714721369833
+}

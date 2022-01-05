@@ -1,10 +1,10 @@
-package com.university.twic.tweets.processing.twitter.bot.math
+package com.university.twic.calculate.bot.math
 
 import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title
 
-import static com.university.twic.tweets.processing.util.BigDecimalAssertionUtil.assertBigDecimal
+import static com.university.twic.calculate.bot.util.BigDecimalAssertionUtil.assertBigDecimal
 
 @Title("Specification for probability math functions")
 @Narrative("It has to calculate probability values")

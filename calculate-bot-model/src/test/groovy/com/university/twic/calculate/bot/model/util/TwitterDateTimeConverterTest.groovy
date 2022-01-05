@@ -1,14 +1,13 @@
-package com.university.twic.tweets.processing.twitter.util
+package com.university.twic.calculate.bot.model.util
 
-import spock.lang.Specification
-
-import java.time.format.DateTimeParseException
-
-import static com.university.twic.tweets.processing.twitter.util.TwitterDateTimeConverter.convertTwitterDateTime;
 import spock.lang.Narrative
+import spock.lang.Specification
 import spock.lang.Title
 
 import java.time.LocalDateTime
+import java.time.format.DateTimeParseException
+
+import static com.university.twic.calculate.bot.model.util.TwitterDateTimeConverter.convertTwitterDateTime
 
 @Title("Tests for twitter date time format converter")
 @Narrative("It has to convert twitter date time")

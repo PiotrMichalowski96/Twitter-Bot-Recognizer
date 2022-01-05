@@ -1,4 +1,4 @@
-package com.university.twic.tweets.processing.twitter.bot.math;
+package com.university.twic.calculate.bot.math;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

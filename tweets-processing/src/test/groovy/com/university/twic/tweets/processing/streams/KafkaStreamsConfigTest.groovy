@@ -1,9 +1,9 @@
 package com.university.twic.tweets.processing.streams
 
+import com.university.twic.calculate.bot.model.Tweet
+import com.university.twic.calculate.bot.model.TwitterBot
+import com.university.twic.calculate.bot.model.TwitterUser
 import com.university.twic.tweets.processing.kafka.TwitterDeserializer
-import com.university.twic.tweets.processing.twitter.bot.TwitterBot
-import com.university.twic.tweets.processing.twitter.model.Tweet
-import com.university.twic.tweets.processing.twitter.model.TwitterUser
 import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter
 import groovy.util.logging.Slf4j
 import org.apache.kafka.common.serialization.LongDeserializer

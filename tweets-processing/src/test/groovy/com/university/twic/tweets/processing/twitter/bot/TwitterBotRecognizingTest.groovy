@@ -1,6 +1,6 @@
 package com.university.twic.tweets.processing.twitter.bot
 
-import com.university.twic.tweets.processing.twitter.model.TwitterUser
+import com.university.twic.calculate.bot.model.TwitterUser
 import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title

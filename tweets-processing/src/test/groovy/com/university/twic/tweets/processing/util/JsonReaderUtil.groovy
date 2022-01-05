@@ -2,7 +2,7 @@ package com.university.twic.tweets.processing.util
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import com.university.twic.tweets.processing.twitter.bot.TwitterBot
+import com.university.twic.calculate.bot.model.TwitterBot
 import groovy.util.logging.Slf4j
 import lombok.experimental.UtilityClass
 import org.apache.commons.io.FileUtils

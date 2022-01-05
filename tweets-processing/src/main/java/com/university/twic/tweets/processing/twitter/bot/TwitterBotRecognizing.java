@@ -1,14 +1,16 @@
 package com.university.twic.tweets.processing.twitter.bot;
 
-import static com.university.twic.tweets.processing.twitter.bot.Parameters.FAST_TWEETING_INCREASE_WEIGHT;
-import static com.university.twic.tweets.processing.twitter.bot.Parameters.MIN_SEC_BETWEEN_TWEETS;
-import static com.university.twic.tweets.processing.twitter.bot.Parameters.TWEET_CONTENT_INCREASE_WEIGHT;
-import static com.university.twic.tweets.processing.twitter.bot.Parameters.WARNING_WORDS;
-import static com.university.twic.tweets.processing.twitter.bot.math.Probability.INITIAL_BOT_PROBABILITY;
-import static com.university.twic.tweets.processing.twitter.bot.math.Probability.multipleIncreaseProbability;
+import static com.university.twic.calculate.bot.service.twitter.Parameters.FAST_TWEETING_INCREASE_WEIGHT;
+import static com.university.twic.calculate.bot.service.twitter.Parameters.MIN_SEC_BETWEEN_TWEETS;
+import static com.university.twic.calculate.bot.service.twitter.Parameters.TWEET_CONTENT_INCREASE_WEIGHT;
+import static com.university.twic.calculate.bot.service.twitter.Parameters.WARNING_WORDS;
+import static com.university.twic.calculate.bot.math.Probability.INITIAL_BOT_PROBABILITY;
+import static com.university.twic.calculate.bot.math.Probability.multipleIncreaseProbability;
 
-import com.university.twic.tweets.processing.twitter.model.Tweet;
-import com.university.twic.tweets.processing.twitter.model.TwitterUser;
+import com.university.twic.calculate.bot.model.Tweet;
+import com.university.twic.calculate.bot.model.TwitterBot;
+import com.university.twic.calculate.bot.model.TwitterUser;
+import com.university.twic.calculate.bot.service.twitter.BotUserCriteria;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;

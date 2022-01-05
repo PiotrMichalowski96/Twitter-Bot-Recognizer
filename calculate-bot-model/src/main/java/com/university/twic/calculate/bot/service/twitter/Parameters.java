@@ -1,4 +1,4 @@
-package com.university.twic.tweets.processing.twitter.bot;
+package com.university.twic.calculate.bot.service.twitter;
 
 import java.util.Set;
 import lombok.experimental.UtilityClass;

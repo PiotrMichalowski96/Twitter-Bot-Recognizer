@@ -1,4 +1,4 @@
-package com.university.twic.tweets.processing.twitter.model;
+package com.university.twic.calculate.bot.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

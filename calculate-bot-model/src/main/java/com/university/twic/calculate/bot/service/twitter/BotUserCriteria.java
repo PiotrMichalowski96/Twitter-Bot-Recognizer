@@ -1,10 +1,14 @@
-package com.university.twic.tweets.processing.twitter.bot;
+package com.university.twic.calculate.bot.service.twitter;
 
-import static com.university.twic.tweets.processing.twitter.bot.Parameters.*;
-import static com.university.twic.tweets.processing.twitter.bot.math.Probability.*;
+import static com.university.twic.calculate.bot.math.Probability.decreaseProbability;
+import static com.university.twic.calculate.bot.math.Probability.increaseProbability;
+import static com.university.twic.calculate.bot.math.Probability.multipleDecreaseProbability;
+import static com.university.twic.calculate.bot.math.Probability.multipleIncreaseProbability;
+import static com.university.twic.calculate.bot.service.twitter.Parameters.*;
+import static com.university.twic.calculate.bot.service.twitter.Parameters.RECENTLY_IN_HOURS;
 
-import com.university.twic.tweets.processing.twitter.model.TwitterUser;
-import com.university.twic.tweets.processing.twitter.util.TwitterDateTimeConverter;
+import com.university.twic.calculate.bot.model.TwitterUser;
+import com.university.twic.calculate.bot.model.util.TwitterDateTimeConverter;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Getter
 @RequiredArgsConstructor
-enum BotUserCriteria {
+public enum BotUserCriteria {
 
   PHOTO((twitterUser, botProbability) -> twitterUser.getDefaultProfile()
       ? multipleIncreaseProbability(botProbability, PHOTO_INCREASE_WEIGHT)

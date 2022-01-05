@@ -17,6 +17,12 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.university.twic</groupId>
+      <artifactId>calculate-bot-model</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-streams</artifactId>
       <version>${kafka.streams.version}</version>
@@ -40,5 +46,14 @@
       <version>3.12.0</version>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

@@ -1,7 +1,7 @@
 package com.university.twic.tweets.processing.twitter.util
 
-import com.university.twic.tweets.processing.twitter.model.Tweet
-import com.university.twic.tweets.processing.twitter.model.TwitterUser
+import com.university.twic.calculate.bot.model.Tweet
+import com.university.twic.calculate.bot.model.TwitterUser
 import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title

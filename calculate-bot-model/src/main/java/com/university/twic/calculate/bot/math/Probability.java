@@ -7,7 +7,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Probability {
 
-  public static final BigDecimal INITIAL_BOT_PROBABILITY = BigDecimal.valueOf(0.3);
   private static final BigDecimal PARAMETER = BigDecimal.valueOf(0.9);
 
   /**

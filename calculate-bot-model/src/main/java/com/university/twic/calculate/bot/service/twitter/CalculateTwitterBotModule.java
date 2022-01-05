@@ -1,11 +1,9 @@
 package com.university.twic.calculate.bot.service.twitter;
 
-import static com.university.twic.calculate.bot.math.Probability.INITIAL_BOT_PROBABILITY;
 import static com.university.twic.calculate.bot.math.Probability.multipleIncreaseProbability;
-import static com.university.twic.calculate.bot.service.twitter.Parameters.FAST_TWEETING_INCREASE_WEIGHT;
-import static com.university.twic.calculate.bot.service.twitter.Parameters.MIN_SEC_BETWEEN_TWEETS;
-import static com.university.twic.calculate.bot.service.twitter.Parameters.TWEET_CONTENT_INCREASE_WEIGHT;
-import static com.university.twic.calculate.bot.service.twitter.Parameters.WARNING_WORDS;
+import static com.university.twic.calculate.bot.service.twitter.ModelParameter.FAST_TWEETING_INCREASE_WEIGHT;
+import static com.university.twic.calculate.bot.service.twitter.ModelParameter.MIN_SEC_BETWEEN_TWEETS;
+import static com.university.twic.calculate.bot.service.twitter.ModelParameter.TWEET_CONTENT_INCREASE_WEIGHT;
 
 import com.university.twic.calculate.bot.model.Tweet;
 import com.university.twic.calculate.bot.model.TwitterBot;
@@ -29,15 +27,14 @@ public class CalculateTwitterBotModule implements CalculateBotModule<TwitterBot,
 
   private TwitterBot previousBotModel;
   @NonNull
-  private final Map<String, Double> modelParametersMap;
+  private final Map<ModelParameter, Integer> modelParametersMap;
   @NonNull
   private final Set<String> warningWordsSet;
+  @NonNull
+  private final BigDecimal initialBotProbability;
 
   @Override
   public TwitterBot initializeBotModel() {
-//    BigDecimal initialBotProbability = modelParametersMap.getOrDefault(ModelParameter.INITIAL_BOT_PROBABILITY, BigDecimal.ZERO);
-    BigDecimal initialBotProbability = INITIAL_BOT_PROBABILITY;
-
     return TwitterBot.builder()
         .botProbability(initialBotProbability)
         .analyzedTweets(0L)
@@ -80,7 +77,7 @@ public class CalculateTwitterBotModule implements CalculateBotModule<TwitterBot,
       return BigDecimal.ZERO;
     }
 
-    botProbability = BotUserCriteria.getBotProbabilityAllCriteria(twitterUser, botProbability);
+    botProbability = BotUserCriteria.getBotProbabilityAllCriteria(twitterUser, botProbability, modelParametersMap, warningWordsSet);
 
     return botProbability;
   }
@@ -102,10 +99,12 @@ public class CalculateTwitterBotModule implements CalculateBotModule<TwitterBot,
 
   private BigDecimal calculateBotProbabilityBasedOnTweetContent(String tweetContent, BigDecimal botProbability) {
 
-    boolean isContentWarning = WARNING_WORDS.stream()
+    boolean isContentWarning = warningWordsSet.stream()
         .anyMatch(word -> StringUtils.containsIgnoreCase(tweetContent, word));
+
+    int tweetContentIncreaseWeight = modelParametersMap.getOrDefault(TWEET_CONTENT_INCREASE_WEIGHT, 4);
     return (isContentWarning)
-        ? multipleIncreaseProbability(botProbability, TWEET_CONTENT_INCREASE_WEIGHT) : botProbability;
+        ? multipleIncreaseProbability(botProbability, tweetContentIncreaseWeight) : botProbability;
   }
 
   private BigDecimal calculateBotProbabilityBasedOnFastTweeting(LocalDateTime newTweetTime,
@@ -113,7 +112,9 @@ public class CalculateTwitterBotModule implements CalculateBotModule<TwitterBot,
       BigDecimal botProbability) {
 
     long secondsBetweenTweets = Duration.between(lastTweetTime, newTweetTime).toSeconds();
-    return (secondsBetweenTweets < MIN_SEC_BETWEEN_TWEETS)
-        ? multipleIncreaseProbability(botProbability, FAST_TWEETING_INCREASE_WEIGHT) : botProbability;
+    int minSecBetweenTweets = modelParametersMap.getOrDefault(MIN_SEC_BETWEEN_TWEETS, 5);
+    int fastTweetingIncreaseWeight = modelParametersMap.getOrDefault(FAST_TWEETING_INCREASE_WEIGHT, 5);
+    return (secondsBetweenTweets < minSecBetweenTweets)
+        ? multipleIncreaseProbability(botProbability, fastTweetingIncreaseWeight) : botProbability;
   }
 }

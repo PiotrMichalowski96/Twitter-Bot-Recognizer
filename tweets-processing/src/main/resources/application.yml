@@ -10,6 +10,7 @@ kafka:
     intermediary: twitter_bot_accounts_intermediary
 
 calcbot:
+  initialBotProbability: 0.3
   warningWords:
     - register
     - join

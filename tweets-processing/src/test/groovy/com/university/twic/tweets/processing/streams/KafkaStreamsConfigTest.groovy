@@ -6,9 +6,11 @@ import com.university.twic.calculate.bot.model.TwitterUser
 import com.university.twic.calculate.bot.service.CalculateBotModuleCreator
 import com.university.twic.calculate.bot.service.CalculateBotProcessorService
 import com.university.twic.calculate.bot.service.twitter.CalculateTwitterBotModule
+import com.university.twic.calculate.bot.service.twitter.ModelParameter
 import com.university.twic.tweets.processing.kafka.TwitterDeserializer
 import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter
 import groovy.util.logging.Slf4j
+import org.apache.commons.lang3.RandomStringUtils
 import org.apache.kafka.common.serialization.LongDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.apache.kafka.streams.*
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+import static com.university.twic.calculate.bot.service.twitter.ModelParameter.*
 import static com.university.twic.tweets.processing.util.JsonReaderUtil.extractTwitterBotFromJson
 import static com.university.twic.tweets.processing.util.JsonReaderUtil.readFileAsString
 import static java.util.Map.entry
@@ -117,16 +120,35 @@ class KafkaStreamsConfigTest {
         kafkaStreamsConfig.setInputTopic(INPUT_TOPIC_NAME)
         kafkaStreamsConfig.setIntermediaryTopic('intermediaryTopic')
         kafkaStreamsConfig.setOutputTopic(OUTPUT_TOPIC_NAME)
-        kafkaStreamsConfig.setAppName('Kafka Streams App')
+        kafkaStreamsConfig.setAppName(RandomStringUtils.randomAlphabetic(10))
         kafkaStreamsConfig.setBootstrapAddress('1.2.3.4')
         return kafkaStreamsConfig
     }
 
-    //TODO: change setting properties
     private static CalculateBotProcessorService<TwitterBot, Tweet> initializeBotProcessorService() {
+        BigDecimal initialBotProbability = BigDecimal.valueOf(0.3)
+        Set<String> warningWords = Set.of('register', 'join', 'sign', 'link', 'retweet', 'receive', 'bonus')
+        Map<ModelParameter, Integer> modelBotFactorsMap = Map.ofEntries(
+            entry(RECENTLY_IN_HOURS, 240),
+            entry(MIN_FOLLOWERS, 10),
+            entry(MAX_FOLLOWINGS, 100),
+            entry(MAX_LIKED_TWEETS, 1000),
+            entry(MAX_ISSUED_TWEETS, 1000),
+            entry(MIN_SEC_BETWEEN_TWEETS, 5),
+            entry(PHOTO_INCREASE_WEIGHT, 5),
+            entry(PHOTO_DECREASE_WEIGHT, 2),
+            entry(BACKGROUND_INCREASE_WEIGHT, 4),
+            entry(CREATING_TIME_INCREASE_WEIGHT, 4),
+            entry(ACC_NAME_INCREASE_WEIGHT, 3),
+            entry(DESCRIPTION_INCREASE_WEIGHT, 4),
+            entry(FOLLOWERS_INCREASE_WEIGHT, 2),
+            entry(TWEET_CONTENT_INCREASE_WEIGHT, 4),
+            entry(FAST_TWEETING_INCREASE_WEIGHT, 5)
+        )
+
         CalculateBotModuleCreator<TwitterBot, Tweet> botModuleCreator = previousBotModel ->  previousBotModel == null ?
-                new CalculateTwitterBotModule(Collections.emptyMap(), Collections.emptySet()) :
-                new CalculateTwitterBotModule(previousBotModel, Collections.emptyMap(), Collections.emptySet())
+                new CalculateTwitterBotModule(modelBotFactorsMap, warningWords, initialBotProbability) :
+                new CalculateTwitterBotModule(previousBotModel, modelBotFactorsMap, warningWords, initialBotProbability)
 
         return new CalculateBotProcessorService<TwitterBot, Tweet>(botModuleCreator)
     }

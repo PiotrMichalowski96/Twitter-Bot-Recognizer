@@ -3,6 +3,9 @@ package com.university.twic.tweets.processing.streams
 import com.university.twic.calculate.bot.model.Tweet
 import com.university.twic.calculate.bot.model.TwitterBot
 import com.university.twic.calculate.bot.model.TwitterUser
+import com.university.twic.calculate.bot.service.CalculateBotModuleCreator
+import com.university.twic.calculate.bot.service.CalculateBotProcessorService
+import com.university.twic.calculate.bot.service.twitter.CalculateTwitterBotModule
 import com.university.twic.tweets.processing.kafka.TwitterDeserializer
 import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter
 import groovy.util.logging.Slf4j
@@ -25,6 +28,8 @@ class KafkaStreamsConfigTest {
     private static final String OUTPUT_TOPIC_NAME = 'outputTopic'
 
     private KafkaStreamsConfig kafkaStreams
+    private CalculateBotProcessorService<TwitterBot, Tweet> botProcessorService
+
     private TopologyTestDriver testDriver
     private TestInputTopic<String, String> inputTopic
     private TestOutputTopic<Long, TwitterBot> outputTopic
@@ -33,9 +38,10 @@ class KafkaStreamsConfigTest {
     void setup() throws IOException {
         StreamsBuilder builder = new StreamsBuilder()
         kafkaStreams = initializeKafkaStreamsConfig()
+        botProcessorService = initializeBotProcessorService()
 
         //Create Actual Stream Processing pipeline
-        kafkaStreams.tweetStream(builder)
+        kafkaStreams.tweetStream(builder, botProcessorService)
 
         testDriver = new TopologyTestDriver(builder.build(), kafkaStreams.kafkaStreamConfig().asProperties())
 
@@ -114,5 +120,14 @@ class KafkaStreamsConfigTest {
         kafkaStreamsConfig.setAppName('Kafka Streams App')
         kafkaStreamsConfig.setBootstrapAddress('1.2.3.4')
         return kafkaStreamsConfig
+    }
+
+    //TODO: change setting properties
+    private static CalculateBotProcessorService<TwitterBot, Tweet> initializeBotProcessorService() {
+        CalculateBotModuleCreator<TwitterBot, Tweet> botModuleCreator = previousBotModel ->  previousBotModel == null ?
+                new CalculateTwitterBotModule(Collections.emptyMap(), Collections.emptySet()) :
+                new CalculateTwitterBotModule(previousBotModel, Collections.emptyMap(), Collections.emptySet())
+
+        return new CalculateBotProcessorService<TwitterBot, Tweet>(botModuleCreator)
     }
 }

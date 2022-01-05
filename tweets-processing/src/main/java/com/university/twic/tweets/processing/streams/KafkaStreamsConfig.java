@@ -1,12 +1,11 @@
 package com.university.twic.tweets.processing.streams;
 
-import static com.university.twic.tweets.processing.twitter.bot.TwitterBotRecognizing.updateBotModelParameters;
-
 import com.university.twic.calculate.bot.model.Tweet;
 import com.university.twic.calculate.bot.model.TwitterBot;
+import com.university.twic.calculate.bot.service.CalculateBotProcessorConfig;
+import com.university.twic.calculate.bot.service.CalculateBotProcessorService;
 import com.university.twic.tweets.processing.kafka.TwitterDeserializer;
 import com.university.twic.tweets.processing.kafka.TwitterSerializer;
-import com.university.twic.tweets.processing.twitter.bot.TwitterBotRecognizing;
 import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,12 +29,14 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
 
 @Configuration
+@Import(value = CalculateBotProcessorConfig.class)
 @EnableKafka
 @EnableKafkaStreams
 @Getter
@@ -70,7 +71,8 @@ public class KafkaStreamsConfig {
   }
 
   @Bean
-  public KStream<String, String> tweetStream(StreamsBuilder streamsBuilder) {
+  public KStream<String, String> tweetStream(StreamsBuilder streamsBuilder,
+      CalculateBotProcessorService<TwitterBot, Tweet> botProcessorService) {
 
     final Serializer<Tweet> tweetSerializer = new TwitterSerializer<>();
     final Deserializer<Tweet> tweetDeserializer = new TwitterDeserializer<>(Tweet.class);
@@ -94,8 +96,8 @@ public class KafkaStreamsConfig {
     KTable<Long, TwitterBot> twitterBotTable = tweetStream
         .groupByKey(Grouped.with(Serdes.Long(), tweetSerde))
         .aggregate(
-            TwitterBotRecognizing::initialEmptyTwitterBotModel,
-            (key, tweet, twitterBot) -> updateBotModelParameters(twitterBot, tweet),
+            botProcessorService::initializeBot,
+            (key, tweet, twitterBot) -> botProcessorService.calculateBot(twitterBot, tweet),
             Materialized.<Long, TwitterBot, KeyValueStore<Bytes, byte[]>>as("twitter-bot-agg")
                 .withKeySerde(Serdes.Long())
                 .withValueSerde(twitterBotSerde)

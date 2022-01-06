@@ -1,6 +1,7 @@
 package com.university.twic.twitter.model.util
 
 import com.university.twic.twitter.model.domain.Tweet
+import com.university.twic.twitter.model.domain.TwitterBot
 import com.university.twic.twitter.model.domain.TwitterUser
 import spock.lang.Narrative
 import spock.lang.Specification
@@ -51,6 +52,22 @@ class JsonTwitterConverterTest extends Specification {
         resultTweet.createdTime == expectedTweet.createdTime
     }
 
+    def "should extract twitter bot"() {
+        given:
+        String sampleTwitterBotJson = JsonTwitterConverter.readFileAsString("sampleTwitterBot.json")
+        TwitterBot expectedTwitterBot = getExpectedTwitterBot()
+
+        when:
+        TwitterBot resultTwitterBot = JsonTwitterConverter.extractTwitterBotFromJson(sampleTwitterBotJson)
+
+        then:
+        resultTwitterBot.twitterUser.properties == expectedTwitterBot.twitterUser.properties
+        resultTwitterBot.lastTweetContent == expectedTwitterBot.lastTweetContent
+        resultTwitterBot.lastTweetDateTime == expectedTwitterBot.lastTweetDateTime
+        resultTwitterBot.analyzedTweets == expectedTwitterBot.analyzedTweets
+        resultTwitterBot.botProbability == expectedTwitterBot.botProbability
+    }
+
     private static TwitterUser getExpectedTwitterUser() {
         return TwitterUser.builder()
                 .id(1127819079744729088L)
@@ -72,5 +89,15 @@ class JsonTwitterConverterTest extends Specification {
         String expectedText = 'RT @AirdropStario: \ud83d\udca7Twinci Airdrop \ud83d\udca7\n\n\ud83c\udfc6 Task:          \u2795 $15 worth of  TRX\n\n                            \u2795 $50 worth of TWIN\n\n\ud83d\udd1b Airdrop Link\u2026'
         LocalDateTime expectedDateTime = LocalDateTime.of(2021, 4, 2, 11, 49, 15)
         return new Tweet(expectedTwitterUser, expectedText, expectedDateTime)
+    }
+
+    private static TwitterBot getExpectedTwitterBot() {
+        return TwitterBot.builder()
+            .twitterUser(getExpectedTwitterUser())
+            .lastTweetContent('Airdrop Link…')
+            .lastTweetDateTime(LocalDateTime.of(2021, 4, 2, 11, 49, 15))
+            .analyzedTweets(1)
+            .botProbability(0.780332582737)
+            .build()
     }
 }

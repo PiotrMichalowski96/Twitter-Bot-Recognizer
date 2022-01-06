@@ -66,8 +66,8 @@ class KafkaStreamsConfigTest {
         //given
         String tweet = readFileAsString('samples/input/tweet1.json')
         Long expectedKey = extractUserIdFrom(tweet)
-
-        TwitterBot expectedTwitterBot = extractTwitterBotFromJson('samples/output/twitterBot1.json')
+        String twitterBotJson = readFileAsString('samples/output/twitterBot1.json')
+        TwitterBot expectedTwitterBot = extractTwitterBotFromJson(twitterBotJson)
 
         //when
         inputTopic.pipeInput(tweet)
@@ -90,9 +90,12 @@ class KafkaStreamsConfigTest {
         Long userId1 = extractUserIdFrom(tweet1)
         Long userId2 = extractUserIdFrom(tweet3)
 
+        String twitterBotJson1 = readFileAsString('samples/output/twitterBot2_1.json')
+        String twitterBotJson2 = readFileAsString('samples/output/twitterBot2_2.json')
+
         final Map<Long, TwitterBot> expectedTwitterBots = Map.ofEntries(
-            entry(userId1, extractTwitterBotFromJson('samples/output/twitterBot2_1.json')),
-            entry(userId2, extractTwitterBotFromJson('samples/output/twitterBot2_2.json'))
+            entry(userId1, extractTwitterBotFromJson(twitterBotJson1)),
+            entry(userId2, extractTwitterBotFromJson(twitterBotJson2))
         )
 
         //when

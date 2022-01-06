@@ -48,13 +48,12 @@ public class JsonTwitterConverter {
     return new Tweet(twitterUser, text, createdTime);
   }
 
-  public static TwitterBot extractTwitterBotFromJson(String jsonFilePath) throws IOException {
-    String json = readFileAsString(jsonFilePath);
+  public static TwitterBot extractTwitterBotFromJson(String twitterBotJson) throws IOException {
     try {
-      return new Gson().fromJson(json, TwitterBot.class);
+      return new Gson().fromJson(twitterBotJson, TwitterBot.class);
     } catch (JsonSyntaxException e) {
       e.printStackTrace();
-      logger.warn("Couldn't convert Json File to TwitterUser object, Json content: {}", json);
+      logger.warn("Couldn't convert Json File to TwitterUser object, Json content: {}", twitterBotJson);
       return null;
     }
   }

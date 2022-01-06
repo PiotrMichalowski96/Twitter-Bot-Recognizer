@@ -1,4 +1,4 @@
-package com.university.twic.calculate.bot.model;
+package com.university.twic.twitter.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

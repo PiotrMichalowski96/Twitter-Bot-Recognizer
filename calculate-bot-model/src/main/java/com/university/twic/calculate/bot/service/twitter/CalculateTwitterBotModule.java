@@ -5,10 +5,10 @@ import static com.university.twic.calculate.bot.service.twitter.ModelParameter.F
 import static com.university.twic.calculate.bot.service.twitter.ModelParameter.MIN_SEC_BETWEEN_TWEETS;
 import static com.university.twic.calculate.bot.service.twitter.ModelParameter.TWEET_CONTENT_INCREASE_WEIGHT;
 
-import com.university.twic.calculate.bot.model.Tweet;
-import com.university.twic.calculate.bot.model.TwitterBot;
-import com.university.twic.calculate.bot.model.TwitterUser;
 import com.university.twic.calculate.bot.service.CalculateBotModule;
+import com.university.twic.twitter.model.domain.Tweet;
+import com.university.twic.twitter.model.domain.TwitterBot;
+import com.university.twic.twitter.model.domain.TwitterUser;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;

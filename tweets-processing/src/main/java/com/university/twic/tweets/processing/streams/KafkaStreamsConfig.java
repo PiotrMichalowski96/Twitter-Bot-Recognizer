@@ -1,12 +1,12 @@
 package com.university.twic.tweets.processing.streams;
 
-import com.university.twic.calculate.bot.model.Tweet;
-import com.university.twic.calculate.bot.model.TwitterBot;
 import com.university.twic.calculate.bot.service.CalculateBotProcessorConfig;
 import com.university.twic.calculate.bot.service.CalculateBotProcessorService;
 import com.university.twic.tweets.processing.kafka.TwitterDeserializer;
 import com.university.twic.tweets.processing.kafka.TwitterSerializer;
-import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter;
+import com.university.twic.twitter.model.domain.Tweet;
+import com.university.twic.twitter.model.domain.TwitterBot;
+import com.university.twic.twitter.model.util.JsonTwitterConverter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

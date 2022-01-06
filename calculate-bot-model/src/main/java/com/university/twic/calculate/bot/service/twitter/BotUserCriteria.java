@@ -6,8 +6,8 @@ import static com.university.twic.calculate.bot.math.Probability.multipleDecreas
 import static com.university.twic.calculate.bot.math.Probability.multipleIncreaseProbability;
 import static com.university.twic.calculate.bot.service.twitter.ModelParameter.*;
 
-import com.university.twic.calculate.bot.model.TwitterUser;
-import com.university.twic.calculate.bot.model.util.TwitterDateTimeConverter;
+import com.university.twic.twitter.model.domain.TwitterUser;
+import com.university.twic.twitter.model.util.TwitterDateTimeConverter;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;

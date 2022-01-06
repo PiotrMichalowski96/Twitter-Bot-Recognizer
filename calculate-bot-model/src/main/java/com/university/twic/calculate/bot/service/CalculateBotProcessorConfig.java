@@ -1,9 +1,9 @@
 package com.university.twic.calculate.bot.service;
 
-import com.university.twic.calculate.bot.model.Tweet;
-import com.university.twic.calculate.bot.model.TwitterBot;
 import com.university.twic.calculate.bot.service.twitter.CalculateTwitterBotModule;
 import com.university.twic.calculate.bot.service.twitter.ModelParameter;
+import com.university.twic.twitter.model.domain.Tweet;
+import com.university.twic.twitter.model.domain.TwitterBot;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;

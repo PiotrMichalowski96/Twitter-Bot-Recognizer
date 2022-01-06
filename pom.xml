@@ -9,6 +9,7 @@
 		<module>tweets-processing</module>
     <module>kafka-elasticsearch-consumer</module>
     <module>calculate-bot-model</module>
+    <module>twitter-java-model</module>
   </modules>
 
 	<parent>

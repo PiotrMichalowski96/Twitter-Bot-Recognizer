@@ -1,4 +1,4 @@
-package com.university.twic.calculate.bot.model.util;
+package com.university.twic.twitter.model.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

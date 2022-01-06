@@ -1,14 +1,13 @@
-package com.university.twic.tweets.processing.twitter.util
+package com.university.twic.twitter.model.util
 
-import com.university.twic.calculate.bot.model.Tweet
-import com.university.twic.calculate.bot.model.TwitterUser
+import com.university.twic.twitter.model.domain.Tweet
+import com.university.twic.twitter.model.domain.TwitterUser
 import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title
 
 import java.time.LocalDateTime
 
-import static com.university.twic.tweets.processing.util.JsonReaderUtil.readFileAsString
 import static org.assertj.core.api.Assertions.assertThat
 
 @Title("Tests for twitter message json converter")
@@ -17,7 +16,7 @@ class JsonTwitterConverterTest extends Specification {
 
     def "should extract user from tweet"() {
         given:
-        String sampleTweetJson = readFileAsString('sampleTweet.json')
+        String sampleTweetJson = JsonTwitterConverter.readFileAsString('sampleTweet.json')
         TwitterUser expectedTwitterUser = getExpectedTwitterUser()
 
         when:
@@ -40,7 +39,7 @@ class JsonTwitterConverterTest extends Specification {
 
     def "should extract correct tweet"() {
         given:
-        String sampleTweetJson = readFileAsString('sampleTweet.json')
+        String sampleTweetJson = JsonTwitterConverter.readFileAsString('sampleTweet.json')
         Tweet expectedTweet = getExpectedTweet()
 
         when:

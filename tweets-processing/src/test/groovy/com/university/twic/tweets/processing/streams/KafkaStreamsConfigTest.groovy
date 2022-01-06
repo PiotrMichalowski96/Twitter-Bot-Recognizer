@@ -1,14 +1,14 @@
 package com.university.twic.tweets.processing.streams
 
-import com.university.twic.calculate.bot.model.Tweet
-import com.university.twic.calculate.bot.model.TwitterBot
-import com.university.twic.calculate.bot.model.TwitterUser
 import com.university.twic.calculate.bot.service.CalculateBotModuleCreator
 import com.university.twic.calculate.bot.service.CalculateBotProcessorService
 import com.university.twic.calculate.bot.service.twitter.CalculateTwitterBotModule
 import com.university.twic.calculate.bot.service.twitter.ModelParameter
 import com.university.twic.tweets.processing.kafka.TwitterDeserializer
-import com.university.twic.tweets.processing.twitter.util.JsonTwitterConverter
+import com.university.twic.twitter.model.domain.Tweet
+import com.university.twic.twitter.model.domain.TwitterBot
+import com.university.twic.twitter.model.domain.TwitterUser
+import com.university.twic.twitter.model.util.JsonTwitterConverter
 import groovy.util.logging.Slf4j
 import org.apache.commons.lang3.RandomStringUtils
 import org.apache.kafka.common.serialization.LongDeserializer
@@ -20,8 +20,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import static com.university.twic.calculate.bot.service.twitter.ModelParameter.*
-import static com.university.twic.tweets.processing.util.JsonReaderUtil.extractTwitterBotFromJson
-import static com.university.twic.tweets.processing.util.JsonReaderUtil.readFileAsString
+import static com.university.twic.twitter.model.util.JsonTwitterConverter.extractTwitterBotFromJson
+import static com.university.twic.twitter.model.util.JsonTwitterConverter.readFileAsString
 import static java.util.Map.entry
 
 @Slf4j

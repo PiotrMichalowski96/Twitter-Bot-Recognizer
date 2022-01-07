@@ -12,6 +12,8 @@ Project is separated into 3 microservices:
 2. Tweet-Processing is implemented using Kafka Streams processing - it calculates probability that account is a bot based on tweets. Twitter account bot data is sent to another Kafka topic.
 3. Kafka-Elasticsearch-Consumer is reading from Kafka topic and sending Twitter account data (with bot probability) to remote ELK cluster.
 
+![TwitterBotApp-Microservices](https://user-images.githubusercontent.com/57149032/148589991-9990e877-f96a-4012-9ca9-1658ffb7ad46.png)
+
 ## Code introduction
 Code is separeted into 5 modules.
 

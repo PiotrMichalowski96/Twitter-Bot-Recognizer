@@ -1,14 +1,3 @@
-server:
-  port: 8082
-application:
-  name: tweets-processing-app
-kafka:
-  bootstrapAddress: 127.0.0.1:9092
-  topic:
-    tweets: twitter_tweets_raw
-    users: twitter_bot_accounts
-    intermediary: twitter_bot_accounts_intermediary
-
 calcbot:
   initialBotProbability: 0.3
   warningWords:

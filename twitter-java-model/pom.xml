@@ -9,24 +9,14 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>kafka-twitter-producer</artifactId>
+  <artifactId>twitter-java-model</artifactId>
 
   <dependencies>
-    <!-- twitter dependency-->
     <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>hbc-core</artifactId>
-      <version>2.2.0</version>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.6</version>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

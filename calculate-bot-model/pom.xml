@@ -9,24 +9,24 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>kafka-twitter-producer</artifactId>
+  <artifactId>calculate-bot-model</artifactId>
+
+  <properties>
+    <twitter-java-model.version>0.0.1-SNAPSHOT</twitter-java-model.version>
+  </properties>
 
   <dependencies>
-    <!-- twitter dependency-->
     <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>hbc-core</artifactId>
-      <version>2.2.0</version>
+      <groupId>com.university.twic</groupId>
+      <artifactId>twitter-java-model</artifactId>
+      <version>${twitter-java-model.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.12.0</version>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

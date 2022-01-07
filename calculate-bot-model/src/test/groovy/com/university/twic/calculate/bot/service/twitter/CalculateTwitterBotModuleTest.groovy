@@ -3,7 +3,9 @@ package com.university.twic.calculate.bot.service.twitter
 import com.university.twic.twitter.model.domain.Tweet
 import com.university.twic.twitter.model.domain.TwitterBot
 import com.university.twic.twitter.model.domain.TwitterUser
+import spock.lang.Narrative
 import spock.lang.Specification
+import spock.lang.Title
 
 import java.time.LocalDateTime
 
@@ -25,6 +27,8 @@ import static com.university.twic.calculate.bot.service.twitter.ModelParameter.T
 import static com.university.twic.calculate.bot.util.BigDecimalAssertionUtil.assertBigDecimal
 import static java.util.Map.entry
 
+@Title("Specification for Calculate Twitter Bot Module")
+@Narrative("It has to calculate twitter bot probability based on different factors in tweets")
 class CalculateTwitterBotModuleTest extends Specification {
 
     private static final BigDecimal INITIAL_BOT_PROBABILITY = BigDecimal.valueOf(0.3)

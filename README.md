@@ -1,4 +1,6 @@
 # Twitter-Bot-Recognizer
+[![<PiotrMichalowski96>](https://circleci.com/gh/PiotrMichalowski96/Twitter-Bot-Recognizer.svg?style=svg)](https://circleci.com/gh/PiotrMichalowski96/Twitter-Bot-Recognizer)
+
 Project for University Subject
 
 Use case is to identify real bot accounts on Twitter

@@ -11,6 +11,10 @@
 
   <artifactId>kafka-twitter-producer</artifactId>
 
+  <properties>
+    <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+  </properties>
+
   <dependencies>
     <!-- twitter dependency-->
     <dependency>

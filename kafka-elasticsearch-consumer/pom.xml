@@ -13,6 +13,7 @@
 
   <properties>
     <elasticsearch.version>7.11.1</elasticsearch.version>
+    <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
   </properties>
 
   <dependencies>

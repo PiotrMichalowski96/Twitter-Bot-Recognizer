@@ -13,6 +13,7 @@
 
   <properties>
     <twitter-java-model.version>0.0.1-SNAPSHOT</twitter-java-model.version>
+    <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
   </properties>
 
   <dependencies>

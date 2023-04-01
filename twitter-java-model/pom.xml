@@ -11,6 +11,10 @@
 
   <artifactId>twitter-java-model</artifactId>
 
+  <properties>
+    <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.google.code.gson</groupId>

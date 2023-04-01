@@ -1,6 +1,12 @@
 # Twitter-Bot-Recognizer
 [![<PiotrMichalowski96>](https://circleci.com/gh/PiotrMichalowski96/Twitter-Bot-Recognizer.svg?style=svg)](https://circleci.com/gh/PiotrMichalowski96/Twitter-Bot-Recognizer)
 
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=PiotrMichalowski96_Twitter-Bot-Recognizer)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=PiotrMichalowski96_Twitter-Bot-Recognizer&metric=bugs)](https://sonarcloud.io/dashboard?id=PiotrMichalowski96_Twitter-Bot-Recognizer)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=PiotrMichalowski96_Twitter-Bot-Recognizer&metric=coverage)](https://sonarcloud.io/dashboard?id=PiotrMichalowski96_Twitter-Bot-Recognizer)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=PiotrMichalowski96_Twitter-Bot-Recognizer&metric=ncloc)](https://sonarcloud.io/dashboard?id=PiotrMichalowski96_Twitter-Bot-Recognizer)
+
+
 Project for University Subject
 
 Use case is to identify real bot accounts on Twitter
